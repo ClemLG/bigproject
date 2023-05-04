@@ -1,0 +1,8 @@
+
+{
+  "username": "dualz",
+  "password": "9999999999",
+  "database": "dualz",
+  "host": "localhost",
+  "dialect": "mariadb"
+}
