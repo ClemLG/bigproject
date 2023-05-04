@@ -1,4 +1,4 @@
-# hello-world
+# Frontend
 
 ## Project setup
 ```
