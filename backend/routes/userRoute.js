@@ -1,7 +1,7 @@
 import express from 'express'
-import userController from '../controllers/userController.js'
+import userCtrl from '../controllers/userController'
 
 //Création du routeur
 const router = express.Router()
 
-router.get('/:id', userController)
+router.get('/:id', userCtrl)

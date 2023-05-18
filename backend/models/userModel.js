@@ -1,8 +1,7 @@
 import {DataTypes} from 'sequelize'
 import sequelize from '../config/db.js'
-import Event from './eventModel.js'
 
-const User = sequelize.define('user',
+const User = sequelize.define('users',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -10,7 +9,7 @@ const User = sequelize.define('user',
             allowNull: false,
             primaryKey: true,
         },
-        userName: {
+        username: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -27,11 +26,16 @@ const User = sequelize.define('user',
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
+        },
+        token: {
+            type: DataTypes.CHAR(255),
+            allowNull: false
+        },
+        salt: {
+            type: DataTypes.CHAR(255),
+            allowNull: false
         }
     }
 )
-
-//Associations
-User.hasMany(Event)
 
 export default User
