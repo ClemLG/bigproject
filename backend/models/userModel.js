@@ -1,7 +1,7 @@
 import {DataTypes} from 'sequelize'
 import sequelize from '../config/db.js'
 
-const User = sequelize.define('users',
+const User = sequelize.define('user',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -28,10 +28,6 @@ const User = sequelize.define('users',
             defaultValue: false,
         },
         token: {
-            type: DataTypes.CHAR(255),
-            allowNull: false
-        },
-        salt: {
             type: DataTypes.CHAR(255),
             allowNull: false
         }

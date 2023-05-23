@@ -1,10 +1,11 @@
 import express from 'express';
 import db from './config/db.js';
 import dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
 
 //Import des routes
 import authRoute from './routes/authRoute.js';
-
+import eventRoute from "./routes/eventRoute.js";
 
 dotenv.config()
 
@@ -14,8 +15,11 @@ const app = express();
 // Creation du middleware pour accèder au corps de la requête
 app.use(express.json());
 
-const port = process.env.PORT || 7000;
+//Utilisation du gestionnaire de cookies
+app.use(cookieParser());
 
+//Configuration du port du serveur
+const port = process.env.PORT || 7000;
 console.log(port)
 
 // MIDDLEWARE CORS HEADER
@@ -28,8 +32,9 @@ app.use((req, res, next) => {
 
 //Utilisation des routes
 app.use('/api/auth', authRoute);
+app.use('/api/event', eventRoute)
 
-// Ecoute du port serveur
+// Ecoute du port serveur et synchronisation bdd
 app.listen(port, () => {
     // Enregistrement et synchronisation avec la base de données
     db.sync()

@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import crypto from 'crypto'
 import sgMail from '@sendgrid/mail'
 import dotenv from 'dotenv'
 
@@ -15,8 +14,6 @@ import User from '../models/userModel.js'
 export async function register(req, res) {
     //Récuperation des données des champs du formulaire envoyé dans la requete par l'utlisateur
     const requestPayload = req.body
-
-    const secretKey = crypto.randomBytes(64).toString("hex")
 
     //Verification de la conformité des données
     //Vérification de la présence des champs obligatoires
@@ -57,10 +54,6 @@ export async function register(req, res) {
         return
     }
 
-
-    //Enregistrement d'un nouvel user dans la table "users"
-    let salt = bcrypt.genSaltSync(10)
-
     const token = jwt.sign(
         {
             username: requestPayload.username
@@ -70,16 +63,16 @@ export async function register(req, res) {
         {expiresIn: "24h"}
     )
     // @TODO : dynamique https://localhost:3003
-    let confirmationUrl = `https://localhost:3003/ws/confirm-email?token=${token}`
+    let localUrl = "https://localhost:3003"
+    let confirmationUrl = `https://${localUrl}/ws/confirm-email?token=${token}`
 
     let user
     try {
         user = await User.create({
             username: `${requestPayload.username}`,
             email: `${requestPayload.email}`,
-            password: bcrypt.hashSync(`${requestPayload.password + salt}`, 10),
+            password: bcrypt.hashSync(requestPayload.password, 10),
             token: token,
-            salt: salt,
             isActive: 0
         })
     } catch (err) {
@@ -88,6 +81,7 @@ export async function register(req, res) {
     }
 
     res.status(201).send(user)
+    res.cookie('token', token, { httpOnly: true, maxAge: 86400000 });
     console.log('Utilisateur créé')
 
     //Envoi d'un mail de confirmation
@@ -132,10 +126,7 @@ export async function login(req, res) {
         return
     }
     // Si on trouve l'utilisateur, on compare le mot de passe envoyé par l'utilisateur qui veut se connecter avec le hash enregistré
-    let passwordIsValid = bcrypt.compareSync(
-        requestPayload.password,
-        user.password
-    )
+    let passwordIsValid = bcrypt.compareSync(requestPayload.password, user.password)
     // Si mot de passe incorrect on renvoi un status 401 avec message au serveur
     if (!passwordIsValid) {
         res.status(401).send({
@@ -156,7 +147,6 @@ export async function login(req, res) {
     )
 
     res.status(200).json({
-        accessToken: token,
-        user: user
+        accessToken: token
     })
 }
