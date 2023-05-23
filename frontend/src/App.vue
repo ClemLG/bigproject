@@ -1,15 +1,17 @@
 <template>
-    <router-view/>
+  <router-view/>
 </template>
 
 <style lang="scss">
 @import "./assets/sass/variables.scss";
+@import "./style/style.scss";
+
 *, *:before, *:after {
-    font-family: Poppins, Helvetica, Arial, sans-serif;
+  font-family: PT Sans, Helvetica, Arial, sans-serif;
 }
 
 body {
-    background-color: $bg-dark-grey;
+  background-color: $bg-dark-grey;
 }
 
 #app {
@@ -18,11 +20,11 @@ body {
 }
 
 nav {
-  padding: 30px;
+  padding: 32px;
 
   a {
     font-weight: bold;
-    color: #2c3e50;
+    color: $links;
 
     &.router-link-exact-active {
       color: #42b983;
