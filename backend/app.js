@@ -5,7 +5,11 @@ import cookieParser from 'cookie-parser'
 
 //Import des routes
 import authRoute from './routes/authRoute.js';
-import eventRoute from "./routes/eventRoute.js";
+import eventRoute from './routes/eventRoute.js';
+import userRoute from './routes/userRoute.js';
+
+import authMiddleware from './middlewares/authMiddleware.js'
+import {activate} from "./controllers/authController.js";
 
 dotenv.config()
 
@@ -23,16 +27,23 @@ const port = process.env.PORT || 7000;
 console.log(port)
 
 // MIDDLEWARE CORS HEADER
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+app.use('/api', (req, res, next) => {
+    const origin = req.headers.origin;
+    res.set({
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+        "Access-Control-Allow-Headers": "Content-Type, *",
+    })
     next();
 });
 
 //Utilisation des routes
+// app.all('/api/*', authMiddleware)
+app.get('/activate/:token', activate)
 app.use('/api/auth', authRoute);
-app.use('/api/event', eventRoute)
+app.use('/api/event', eventRoute);
+app.use('/api/user', userRoute);
 
 // Ecoute du port serveur et synchronisation bdd
 app.listen(port, () => {

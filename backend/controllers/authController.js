@@ -62,9 +62,8 @@ export async function register(req, res) {
         process.env.JWT_TOKEN,
         {expiresIn: "24h"}
     )
-    // @TODO : dynamique https://localhost:3003
-    let localUrl = "https://localhost:3003"
-    let confirmationUrl = `https://${localUrl}/ws/confirm-email?token=${token}`
+
+    let confirmationUrl = `https://${process.env.LOCAL_URL}/activate?token=${token}`
 
     let user
     try {
@@ -81,7 +80,6 @@ export async function register(req, res) {
     }
 
     res.status(201).send(user)
-    res.cookie('token', token, { httpOnly: true, maxAge: 86400000 });
     console.log('Utilisateur créé')
 
     //Envoi d'un mail de confirmation
@@ -93,7 +91,7 @@ export async function register(req, res) {
         subject: 'confirmation',
         html: `<h1>Bonjour ${requestPayload.username} !</h1> <br>
                 <h2>Prêt pour la compétition ?</h2> <br>
-                <p>Confirme ton inscription en cliquant sur le lien suivant: <br> ${confirmationUrl}`,
+                <p>Confirme ton inscription en cliquant sur le lien suivant:${confirmationUrl}`,
     }
 
     try {
@@ -102,7 +100,6 @@ export async function register(req, res) {
     } catch (err) {
         console.error(err)
     }
-
 }
 
 // Connexion
@@ -131,7 +128,7 @@ export async function login(req, res) {
     if (!passwordIsValid) {
         res.status(401).send({
             accessToken: null,
-            message: "Invalid Password !"
+            message: "Invalid Password",
         })
         return
     }
@@ -146,7 +143,50 @@ export async function login(req, res) {
         {expiresIn: "24h"}
     )
 
+    res.cookie('Authentification', token, {httpOnly: true, maxAge: 86400000});
     res.status(200).json({
         accessToken: token
     })
+}
+
+export async function activate(req, res) {
+    //Clique sur le lien, trouve l'utilisateur, supprime le token, passe isActive a 1, return bravo vous etes authentifié
+    try {
+        // On trouve l'utilisateur par le jeton
+        const user = await User.findOne({ activationToken: req.token });
+
+        // Si l'utilisateur correspondant au jeton n'a pas été trouvé, on affiche un message d'erreur
+        if (!user) {
+            return res.status(404).send('Jeton invalide');
+        }
+
+        // Mise à jour des informations de l'utilisateur pour activer le compte
+        user.isActive = true;
+
+        // Supprimer le jeton d'activation, puisqu'il n'est plus nécessaire
+        user.token = undefined;
+        await user.save();
+
+        // On redirige l'utilisateur vers une page de succès ou on affiche un message de succès
+        const pageHTML = `
+        <!DOCTYPE html>
+            <html>
+                <head>
+                    <title>Inscription confirmée</title>
+                </head>
+                 <body>
+                    <h1>Inscription confirmée</h1>
+                    <p>Merci d'avoir confirmé votre inscription.</p>
+                </body>
+            </html>
+          `;
+
+        // Envoi de la réponse avec le code HTML
+        res.send(pageHTML);
+
+    } catch (error) {
+        // Gérer toute autre erreur
+        console.error(error);
+        return res.status(500).send('Erreur lors de l\'activation du compte');
+    }
 }

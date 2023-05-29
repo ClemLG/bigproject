@@ -9,6 +9,8 @@ const router = express.Router()
 router.post('/create', eventCtrl.createEvent)
 router.post('/:id/join', eventCtrl.joinEvent)
 router.post('/:id/invite', eventCtrl.invitePlayers)
+router.get('/', eventCtrl.getAllEvents)
+router.get('/:id', eventCtrl.getOneEvent)
 
 //Exports
 export default router

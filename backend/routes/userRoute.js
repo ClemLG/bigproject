@@ -1,7 +1,9 @@
 import express from 'express'
-import userCtrl from '../controllers/userController'
+import * as userCtrl from '../controllers/userController.js'
 
 //Création du routeur
 const router = express.Router()
 
-router.get('/:id', userCtrl)
+router.get('/:id', userCtrl.getOneUser)
+
+export default router

@@ -1,6 +1,7 @@
 import {DataTypes} from 'sequelize'
 import sequelize from '../config/db.js'
 import Match from "./matchModel.js";
+import Event from "./eventModel.js"
 
 const Step = sequelize.define('step',
     {
@@ -10,6 +11,14 @@ const Step = sequelize.define('step',
             allowNull: false,
             primaryKey: true,
         },
+        start_date: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        end_date: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
         level: {
             type: DataTypes.STRING,
             allowNull: false
@@ -17,6 +26,10 @@ const Step = sequelize.define('step',
     }
 )
 
-Step.hasMany(Match, { onDelete: 'CASCADE' });
+Step.associate = () => {
+    Step.belongsTo(Event);
+    Step.hasMany(Match);
+};
+
 
 export default Step

@@ -1,12 +1,13 @@
 import {DataTypes} from 'sequelize'
 import sequelize from '../config/db.js'
+import Event from './eventModel.js'
+import Match from "./matchModel.js";
 
 const User = sequelize.define('user',
     {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
-            allowNull: false,
             primaryKey: true,
         },
         username: {
@@ -33,5 +34,10 @@ const User = sequelize.define('user',
         }
     }
 )
+
+User.associate = () => {
+    User.hasMany(Match);
+    User.belongsToMany(Event, { through: 'EventUser' });
+};
 
 export default User
