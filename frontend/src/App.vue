@@ -1,5 +1,9 @@
+<script setup>
+    import {RouterView} from 'vue-router'
+</script>
+
 <template>
-  <router-view/>
+  <RouterView/>
 </template>
 
 <style lang="scss">
@@ -19,16 +23,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-nav {
-  padding: 32px;
-
-  a {
-    font-weight: bold;
-    color: $links;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+p {
+  margin: 0!important;
 }
 </style>

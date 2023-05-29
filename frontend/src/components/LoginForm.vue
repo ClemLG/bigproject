@@ -33,18 +33,14 @@ export default {
       axios
           .post('http://localhost:3003/api/auth/login', {
             email: this.email,
-            password: this.password
+            password: this.password,
           })
           .then((response) => {
             console.log(response)
-
-            this.notyf.success("Connection réussie !")
+            this.notyf.success("Connection réussie")
 
             // On enregistre le token dans les cookies et on l'envoi sur la page main
-            this.$cookie.set("token", response.data.accessToken, '1')
-
-            // localStorage.setItem("user.avatar", response.data.user.avatar)
-            this.$router.push("/main")
+            this.$route.push("/feed")
             console.log('Requête login envoyée')
           })
           .catch(error => {
@@ -88,8 +84,8 @@ export default {
 
   &__submit-button {
     background-color: $primary-color;
-    color: #000000;
-    font-weight: 500;
+    color: #333333;
+    font-weight: 700;
   }
 }
 </style>

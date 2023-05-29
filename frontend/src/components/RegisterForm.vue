@@ -42,7 +42,7 @@ export default {
       axios.post(`http://localhost:3003/api/auth/register`, {
         username: this.username,
         email: this.email,
-        password: this.password
+        password: this.password,
       })
           .then((response) => {
             console.log(response)
@@ -99,8 +99,8 @@ export default {
 
   &__submit-button {
     background-color: $primary-color;
-    color: #000000;
-    font-weight: 500;
+    color: #333333;
+    font-weight: 700;
   }
 
 }

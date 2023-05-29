@@ -1,8 +1,8 @@
 <template>
   <section class="background"></section>
   <b-container class="home__container">
-    <b-row align-h="center" align-v="center">
-      <b-col cols="12" md="8">
+    <b-row align-h="center" align-v="center" class="py-5">
+      <b-col cols="12" md="6">
         <header class="d-flex flex-column align-items-center mb-4">
           <a @click="reloadPage" aria-label="rechargement de la page">
             <b-img :src="require('../assets/img/dualz_logo.svg')" alt="logo de Dualz" aria-label="logo de Dualz" fluid/>
@@ -15,8 +15,8 @@
           </p>
         </header>
       </b-col>
-      <b-col cols="12" md="4">
-        <b-card class="home__container__card">
+      <b-col cols="12" md="6">
+        <b-card class="home__container__card p-2 p-md-4">
           <SwitchAuth class="mb-4" :current-view="currentView" @switch="onSwitch"/>
           <RegisterForm v-if="currentView === 'register'"/>
           <LoginForm v-if="currentView === 'login'"/>
@@ -66,6 +66,7 @@ export default {
   width: 100%;
   height: 100%;
   filter: blur(4px);
+  background-position: left;
   position: fixed;
   top: 0;
   right: 0;
