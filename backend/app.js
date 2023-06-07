@@ -1,17 +1,22 @@
 import express from 'express';
-import db from './config/db.js';
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
+
+dotenv.config()
+
+
+import db from './config/db.js';
+import Associate from "./models/associateModel.js"
 
 //Import des routes
 import authRoute from './routes/authRoute.js';
 import eventRoute from './routes/eventRoute.js';
 import userRoute from './routes/userRoute.js';
 
+//Import du middleware d'authentification
 import authMiddleware from './middlewares/authMiddleware.js'
-import {activate} from "./controllers/authController.js";
 
-dotenv.config()
+import {activate} from "./controllers/authController.js";
 
 // Appel de la méthode "express" pour créer l'application
 const app = express();
@@ -33,14 +38,15 @@ app.use('/api', (req, res, next) => {
         "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Credentials": true,
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-        "Access-Control-Allow-Headers": "Content-Type, *",
+        "Access-Control-Allow-Headers": "Content-Type, *"
     })
+
     next();
 });
 
 //Utilisation des routes
-// app.all('/api/*', authMiddleware)
-app.get('/activate/:token', activate)
+app.all('/api/*', authMiddleware)
+app.get('/activate', activate)
 app.use('/api/auth', authRoute);
 app.use('/api/event', eventRoute);
 app.use('/api/user', userRoute);

@@ -1,7 +1,6 @@
 import {DataTypes} from 'sequelize'
 import sequelize from '../config/db.js'
-import Event from './eventModel.js'
-import Match from "./matchModel.js";
+import eventModel from "./eventModel.js";
 
 const User = sequelize.define('user',
     {
@@ -23,21 +22,15 @@ const User = sequelize.define('user',
             type: DataTypes.STRING,
             allowNull: false,
         },
-        isActive: {
+        is_active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
         },
         token: {
-            type: DataTypes.CHAR(255),
-            allowNull: false
+            type: DataTypes.CHAR(255)
         }
     }
 )
-
-User.associate = () => {
-    User.hasMany(Match);
-    User.belongsToMany(Event, { through: 'EventUser' });
-};
 
 export default User

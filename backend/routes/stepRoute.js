@@ -6,7 +6,7 @@ import * as stepCtrl from '../controllers/stepController.js'
 const router = express.Router()
 
 // Définition des routes CRUD
-    router.post('/random', stepCtrl.getRandomPairs)
+    router.post('/random', stepCtrl.moveToNextStep)
 
 
 //Exports

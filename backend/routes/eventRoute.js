@@ -7,6 +7,7 @@ const router = express.Router()
 
 // Définition des routes CRUD
 router.post('/create', eventCtrl.createEvent)
+router.post('/:id/table', eventCtrl.generateTournamentTable)
 router.post('/:id/join', eventCtrl.joinEvent)
 router.post('/:id/invite', eventCtrl.invitePlayers)
 router.get('/', eventCtrl.getAllEvents)

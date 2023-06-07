@@ -1,7 +1,5 @@
 import {DataTypes} from 'sequelize'
 import sequelize from '../config/db.js'
-import Step from "./stepModel.js";
-import User from "./userModel.js";
 
 const Event = sequelize.define('event',
     {
@@ -14,6 +12,7 @@ const Event = sequelize.define('event',
         title: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true
         },
         nb_users: {
             type: DataTypes.INTEGER,
@@ -35,8 +34,4 @@ const Event = sequelize.define('event',
     }
 )
 
-Event.associate = () => {
-    Event.hasMany(Step);
-    Event.belongsToMany(User, { through: 'EventUser' });
-};
 export default Event

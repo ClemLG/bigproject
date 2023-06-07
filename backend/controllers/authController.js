@@ -63,7 +63,7 @@ export async function register(req, res) {
         {expiresIn: "24h"}
     )
 
-    let confirmationUrl = `https://${process.env.LOCAL_URL}/activate?token=${token}`
+    let confirmationUrl = `http://${process.env.LOCAL_URL}/activate?token=${token}`
 
     let user
     try {
@@ -127,14 +127,13 @@ export async function login(req, res) {
     // Si mot de passe incorrect on renvoi un status 401 avec message au serveur
     if (!passwordIsValid) {
         res.status(401).send({
-            accessToken: null,
             message: "Invalid Password",
         })
         return
     }
 
     // Sinon on renvoi un status 200 OK avec un objet JSON qui contient l'identifiant de l'utilisateur dans la base ainsi qu'un token
-    let token = jwt.sign(
+    let token = await jwt.sign(
         {
             username: user.username
         },
@@ -143,7 +142,15 @@ export async function login(req, res) {
         {expiresIn: "24h"}
     )
 
-    res.cookie('Authentification', token, {httpOnly: true, maxAge: 86400000});
+    user.token = token
+    user.save()
+
+    res.cookie('Authentification', token, {
+        maxAge: Date.now() + 60 * 60 * 24 * 365,
+        sameSite: 'None',
+        httpOnly: true
+    });
+
     res.status(200).json({
         accessToken: token
     })
@@ -153,22 +160,24 @@ export async function activate(req, res) {
     //Clique sur le lien, trouve l'utilisateur, supprime le token, passe isActive a 1, return bravo vous etes authentifié
     try {
         // On trouve l'utilisateur par le jeton
-        const user = await User.findOne({ activationToken: req.token });
+        const user = await User.findOne({where: {token: req.query.token}});
 
         // Si l'utilisateur correspondant au jeton n'a pas été trouvé, on affiche un message d'erreur
         if (!user) {
-            return res.status(404).send('Jeton invalide');
+            res.status(400).send('Lien invalide');
+            return
         }
 
         // Mise à jour des informations de l'utilisateur pour activer le compte
-        user.isActive = true;
+        user.is_active = true;
 
         // Supprimer le jeton d'activation, puisqu'il n'est plus nécessaire
         user.token = undefined;
         await user.save();
 
         // On redirige l'utilisateur vers une page de succès ou on affiche un message de succès
-        const pageHTML = `
+        // Envoi de la réponse avec le code HTML
+        res.send(`
         <!DOCTYPE html>
             <html>
                 <head>
@@ -179,10 +188,7 @@ export async function activate(req, res) {
                     <p>Merci d'avoir confirmé votre inscription.</p>
                 </body>
             </html>
-          `;
-
-        // Envoi de la réponse avec le code HTML
-        res.send(pageHTML);
+          `);
 
     } catch (error) {
         // Gérer toute autre erreur
