@@ -2,6 +2,7 @@
 import axios from 'axios'
 import {Notyf} from 'notyf'
 import 'notyf/notyf.min.css'
+import router from '../router/index'
 
 export default {
   name: 'LoginForm',
@@ -33,14 +34,14 @@ export default {
       axios
           .post('http://localhost:3003/api/auth/login', {
             email: this.email,
-            password: this.password,
-          })
+            password: this.password
+          }, {withCredentials: true}) // prevoir pour toutes les requetes
           .then((response) => {
             console.log(response)
             this.notyf.success("Connection réussie")
 
             // On enregistre le token dans les cookies et on l'envoi sur la page main
-            this.$route.push("/feed")
+            router.push("/main")
             console.log('Requête login envoyée')
           })
           .catch(error => {
@@ -73,6 +74,7 @@ export default {
 
 .login__form {
   color: $white;
+
   &__input, &__input:focus {
     background-color: $white;
   }

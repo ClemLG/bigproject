@@ -62,7 +62,7 @@ export default {
 @import "../assets/sass/variables.scss";
 
 .background {
-  background-image: url("../assets/img/2207_w026_n002_2268b_p1_2268.jpg");
+  background-image: url("../assets/img/background_home.webp");
   width: 100%;
   height: 100%;
   filter: blur(4px);
