@@ -61,19 +61,18 @@ export default {
   <b-form class="register__form" @submit.prevent="addUser">
     <b-form-group id="username" label="Nom d'utilisateur" label-for="username" label-class="mb-0">
       <b-form-input class="register__form__input" type="text" name="username" id="username"
-                    placeholder="Nom d'utilisateur" v-model="username"></b-form-input>
+                    placeholder="Nom d'utilisateur" v-model="username"/>
     </b-form-group>
     <b-form-group id="email" label="E-Mail" label-for="email" label-class="mb-0">
       <b-form-input class="register__form__input" type="email" name="email" id="email" placeholder="Email"
-                    v-model="email"></b-form-input>
+                    v-model="email"/>
     </b-form-group>
     <b-form-group id="password" label="Mot de passe" label-for="password" label-class="mb-0">
       <b-form-input class="register__form__input" type="password" name="password" id="password"
-                    placeholder="Mot de passe" v-model="password"></b-form-input>
+                    placeholder="Mot de passe" v-model="password"/>
     </b-form-group>
     <b-form-group id="confirm" label="Confirmation mot de passe" label-for="confirm" label-class="mb-0">
-      <b-form-input class="register__form__input" type="password" name="confirm" id="confirm"
-                    placeholder="Confirmation mot de passe " v-model="confirm"></b-form-input>
+      <b-form-input class="register__form__input" type="password" name="confirm" id="confirm" placeholder="Confirmation mot de passe " v-model="confirm"/>
     </b-form-group>
     <div class="d-flex justify-content-center my-4">
       <b-button class="register__form__submit-button" type="submit" aria-role="soumission du formulaire d'inscription">

@@ -57,11 +57,11 @@ export default {
   <b-form class="login__form" @submit.prevent="loginUser">
     <b-form-group id="email" label="E-Mail" label-for="email">
       <b-form-input class="login__form__input" type="email" name="email" id="email" placeholder="Email"
-                    v-model="email"></b-form-input>
+                    v-model="email"/>
     </b-form-group>
     <b-form-group id="password" label="Mot de passe" label-for="password">
-      <b-form-input class="login__form__input" type="password" name="password" id="password"
-                    placeholder="Mot de passe" v-model="password"></b-form-input>
+      <b-form-input class="login__form__input" type="password" name="password" id="password" placeholder="Mot de passe"
+                    v-model="password"/>
     </b-form-group>
     <div class="d-flex justify-content-center mt-5">
       <b-button class="login__form__submit-button mb-5" type="submit">Se connecter</b-button>

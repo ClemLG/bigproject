@@ -26,4 +26,9 @@ body {
 p {
   margin: 0!important;
 }
+
+html, body {
+  height: 100%;
+}
+
 </style>
