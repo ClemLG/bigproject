@@ -1,6 +1,5 @@
 import {DataTypes} from 'sequelize'
 import sequelize from '../config/db.js'
-import stepModel from "./stepModel.js";
 
 const Match = sequelize.define('match',
     {
@@ -10,16 +9,32 @@ const Match = sequelize.define('match',
             allowNull: false,
             primaryKey: true,
         },
-        scoreJ1: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0
+        u1score1: {
+            type: DataTypes.INTEGER
         },
-        scoreJ2: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0
+        u1score2: {
+            type: DataTypes.INTEGER
+        },
+        u2score1: {
+            type: DataTypes.INTEGER
+        },
+        u2score2: {
+            type: DataTypes.INTEGER
+        },
+        isDone: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return this.u1score1 && this.u1score2 && this.u2score1 && this.u2score2 && this.u1score1 === this.u2score1 && this.u1score2 === this.u2score2;
+            },
+            set(value) {
+                throw new Error('Do not try to set the `isDone` value!');
+            }
         }
     })
 
+
+import User from "./userModel.js";
+
+Match.belongsTo(User, {as: 'player1'});
+Match.belongsTo(User, {as: 'player2'});
 export default Match

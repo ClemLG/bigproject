@@ -6,7 +6,7 @@ import * as matchCtrl from '../controllers/matchController.js'
 const router = express.Router()
 
 // Définition des routes CRUD
-router.post('/score', matchCtrl.setScore)
+router.put('/:id', matchCtrl.update)
 
 
 //Exports

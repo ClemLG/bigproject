@@ -1,6 +1,5 @@
-import Sequelize, {DataTypes} from 'sequelize'
+import {DataTypes} from 'sequelize'
 import sequelize from '../config/db.js'
-import eventModel from "./eventModel.js";
 
 const Step = sequelize.define('step',
     {
@@ -17,4 +16,8 @@ const Step = sequelize.define('step',
     }
 )
 
+import Match from "./matchModel.js";
+
+Step.hasMany(Match, {onDelete: 'CASCADE'});
+Match.belongsTo(Step);
 export default Step

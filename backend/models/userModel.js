@@ -1,6 +1,5 @@
 import {DataTypes} from 'sequelize'
 import sequelize from '../config/db.js'
-import eventModel from "./eventModel.js";
 
 const User = sequelize.define('user',
     {
@@ -32,5 +31,4 @@ const User = sequelize.define('user',
         }
     }
 )
-
 export default User

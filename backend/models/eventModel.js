@@ -34,4 +34,11 @@ const Event = sequelize.define('event',
     }
 )
 
+import User from "./userModel.js";
+import Step from "./stepModel.js";
+
+Event.belongsToMany(User, {through: 'events_users'});
+User.belongsToMany(Event, {through: 'events_users'});
+Event.hasMany(Step, {onDelete: 'CASCADE'});
+Step.belongsTo(Event);
 export default Event

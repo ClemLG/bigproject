@@ -6,12 +6,12 @@ dotenv.config()
 
 
 import db from './config/db.js';
-import Associate from "./models/associateModel.js"
 
 //Import des routes
 import authRoute from './routes/authRoute.js';
 import eventRoute from './routes/eventRoute.js';
 import userRoute from './routes/userRoute.js';
+import matchRoute from "./routes/matchRoute.js";
 
 //Import du middleware d'authentification
 import authMiddleware from './middlewares/authMiddleware.js'
@@ -40,7 +40,6 @@ app.use('/api', (req, res, next) => {
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
         "Access-Control-Allow-Headers": "Content-Type, *"
     })
-
     next();
 });
 
@@ -50,6 +49,7 @@ app.get('/activate', activate)
 app.use('/api/auth', authRoute);
 app.use('/api/event', eventRoute);
 app.use('/api/user', userRoute);
+app.use('/api/match', matchRoute);
 
 // Ecoute du port serveur et synchronisation bdd
 app.listen(port, () => {
