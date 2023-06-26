@@ -79,11 +79,9 @@ export async function register(req, res) {
     }
 
     res.status(201).send(user)
-    console.log('Utilisateur créé')
 
     //Envoi d'un mail de confirmation
     sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-    console.log(process.env.SENDGRID_API_KEY)
     const msg = {
         to: `${requestPayload.email}`, // Change to your recipient
         from: 'rumbeul.app@gmail.com', // Change to your verified sender
@@ -95,7 +93,6 @@ export async function register(req, res) {
 
     try {
         await sgMail.send(msg)
-        console.log('Email sent')
     } catch (err) {
         console.error(err)
     }
