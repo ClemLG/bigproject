@@ -15,7 +15,6 @@ import matchRoute from "./routes/matchRoute.js";
 
 //Import du middleware d'authentification
 import authMiddleware from './middlewares/authMiddleware.js'
-
 import {activate} from "./controllers/authController.js";
 
 // Appel de la méthode "express" pour créer l'application
@@ -29,7 +28,6 @@ app.use(cookieParser());
 
 //Configuration du port du serveur
 const port = process.env.PORT || 7000;
-console.log(port)
 
 // MIDDLEWARE CORS HEADER
 app.use('/api', (req, res, next) => {
@@ -37,13 +35,11 @@ app.use('/api', (req, res, next) => {
     res.set({
         "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
-        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+        "Access-Control-Allow-Headers": "Content-Type, *"
     })
     next();
 });
-
-//app.use(function(req,res, next) {
 
 //Utilisation des routes
 app.all('/api/*', authMiddleware)

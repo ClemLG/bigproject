@@ -177,7 +177,6 @@ export async function activate(req, res) {
         <!DOCTYPE html>
             <html lang="en">
                 <head>
-                    <meta charset="utf-8">
                     <title>Inscription confirmée</title>
                 </head>
                  <body>
