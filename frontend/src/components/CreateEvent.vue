@@ -1,6 +1,6 @@
 <script>
 import CreateEventForm from "@/components/CreateEventForm.vue";
-import Modal from "@/components/Modal.vue";
+import Modal from "@/components/ModalForm.vue";
 
 export default {
   components: {
