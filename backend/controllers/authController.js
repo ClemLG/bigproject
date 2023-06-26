@@ -8,7 +8,6 @@ dotenv.config()
 // Import du model user
 import User from '../models/userModel.js'
 
-// Implementation des routes
 
 //Créer un compte
 export async function register(req, res) {
@@ -179,8 +178,9 @@ export async function activate(req, res) {
         // Envoi de la réponse avec le code HTML
         res.send(`
         <!DOCTYPE html>
-            <html>
+            <html lang="en">
                 <head>
+                    <meta charset="utf-8">
                     <title>Inscription confirmée</title>
                 </head>
                  <body>
@@ -194,5 +194,32 @@ export async function activate(req, res) {
         // Gérer toute autre erreur
         console.error(error);
         return res.status(500).send('Erreur lors de l\'activation du compte');
+    }
+}
+
+
+// Déconnexion
+export async function logout(req, res) {
+    // Récupérer le token d'authentification depuis les cookies
+    const token = req.cookies.Authentification;
+
+    try {
+        // Vérifier si l'utilisateur est connecté en recherchant le token dans la base de données
+        const user = await User.findOne({ where: { token } });
+
+        // Si l'utilisateur est trouvé, supprimer le token d'authentification et sauvegarder les modifications
+        if (user) {
+            user.token = undefined;
+            await user.save();
+        }
+
+        // Supprimer le cookie d'authentification
+        res.clearCookie('Authentification');
+
+        // Envoyer une réponse indiquant que l'utilisateur est déconnecté
+        res.status(200).json({ message: 'Utilisateur déconnecté' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erreur lors de la déconnexion');
     }
 }

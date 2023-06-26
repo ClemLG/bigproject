@@ -37,11 +37,13 @@ app.use('/api', (req, res, next) => {
     res.set({
         "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Credentials": true,
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-        "Access-Control-Allow-Headers": "Content-Type, *"
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+        "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
     })
     next();
 });
+
+//app.use(function(req,res, next) {
 
 //Utilisation des routes
 app.all('/api/*', authMiddleware)

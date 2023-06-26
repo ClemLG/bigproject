@@ -5,6 +5,12 @@ import User from "../models/userModel.js";
 //On exporte le middleware d'authentification
 export default async function (req, res, next) {
 
+    if (req.method === 'OPTIONS') {
+        // Si la méthode est OPTIONS, on passe à la prochaine fonction du middleware
+        next();
+        return;
+    }
+
     if (req.path === '/api/auth/register' || req.path === '/api/auth/login') {
         next()
         return

@@ -1,7 +1,6 @@
 // Import des models
 import Match from '../models/matchModel.js'
 import Step from "../models/stepModel.js";
-import Event from "../models/eventModel.js";
 
 // Ajouter le score d'un joueur à un match
 export async function update(req, res) {
@@ -10,7 +9,6 @@ export async function update(req, res) {
         const playerId = req.user.id;
         const score1 = req.body.score1 * 1;
         const score2 = req.body.score2 * 1;
-        const event = await Event.findByPk(req.params.id);
 
         // On vérifie si le match existe
         const match = await Match.findByPk(matchId);
@@ -24,12 +22,16 @@ export async function update(req, res) {
             return res.status(400).json({message: 'Égalité. Veuillez rejouer.'});
         }
 
+        // On récupère l'event du match
+        const step = await match.getStep();
+        const event = await step.getEvent();
+
         // Vérifier si l'Event du match est bien en cours (date_début < now && now < date_fin)
         // Sinon erreur et fin
-        const currentDate = Date.now()
-        if (currentDate < event.start_date.getTime() || currentDate > event.end_date.getTime()) {
-            return res.status(400).json({ message: 'L\'événement n\'est pas en cours.' });
-        }
+        // const currentDate = Date.now()
+        // if (currentDate < event.start_date || event.end_date < currentDate) {
+        //     return res.status(400).json({message: 'L\'événement n\'est pas en cours.'});
+        // }
 
         if (match.isDone) {
             return res.status(403).json({message: 'Match déjà validé'});
@@ -47,13 +49,8 @@ export async function update(req, res) {
             return res.status(403).json({message: 'Vous n\'êtes pas autorisé à ajouter des scores à ce match.'});
         }
 
-        // On veut d'abord connaitre la personne qui a gagné avant de la placer dans le match adéquat
-        let winnerId;
-        if (match.u1score1 > match.u1score2) { // tout simplement
-            winnerId = match.player1Id;
-        } else {
-            winnerId = match.player2Id;
-        }
+        // Enregistrer le match
+        await match.save();
 
         // On revérifie que le match soit validé pour créer ou non une nouvelle step
         if (!match.isDone) {
@@ -65,50 +62,47 @@ export async function update(req, res) {
             return;
         }
 
-        // Enregistrer le match
-        await match.save();
+        // On veut d'abord connaitre la personne qui a gagné avant de la placer dans le match adéquat
+        let winnerId;
+        if (match.u1score1 > match.u1score2) {
+            winnerId = match.player1Id;
+        } else {
+            winnerId = match.player2Id;
+        }
 
         // On récupère la step actuelle
         const currentStep = await match.getStep();
 
-        // On vérifie si une step supérieur a déjà été créée
-        const nextStep = await Step.findOrCreate({where: {eventId: event.id, level: currentStep.level + 1}});
-
+        //@TODO A IMPLETEMENTER
         // Si mon dernier match de la step actuelle n'a pas de player2, alors on attribue d'office à ce match l'id de la step suivante
-        // Ca passe au pluriel cette variable, car c'est un tableau, et ça serait plutôt `currentStepMatches`
-        const currentStepMatches = await currentStep.getMatches({order: [['createdAt', 'DESC']]});
-        if (currentStepMatches.length > 0 && currentStepMatches[0].player2Id === null) {
-            currentStepMatches[0].stepId = nextStep.id;
-            currentStepMatches[0].player2Id = winnerId
-            await currentStepMatches[0].save();
-        } else {
-            // Même logique que joinEvent, je recherche le dernier match de la step
-            // S'il n'existe pas ou a déjà un P2 j'en cré 1 et je place le P1
-            // S'il existe je place le winner en P2
-            // Et FI-NI-TO
 
-            // On récupère le dernier match de l'étape actuelle
-            const lastMatch = await currentStep.getMatches({order: [['createdAt', 'DESC']], limit: 1});
-            const match = lastMatch[0];
 
-            // Si le match n'existe pas ou a déjà un joueur 2, on crée un nouveau match et place le joueur 1
-            if (!match || match.player2Id) {
-                await Match.create({
-                    player1Id: playerId,
-                    stepId: currentStep.id
-                });
-            } else {
-                // Sinon, on place le gagnant en tant que joueur 2 du dernier match
-                match.player2Id = playerId;
-                await match.save();
+        // On vérifie si une step supérieur a déjà été créée
+        const nextStep = await Step.findOrCreate({
+            where: {
+                eventId: event.id,
+                level: currentStep.level + 1
             }
+        });
+
+        const nextStepMatches = await Match.findAll({ where: { stepId: nextStep[0].id, player2Id: null } });
+
+        // Si le match n'existe pas ou a déjà un joueur 2, on crée un nouveau match et place le joueur 1
+        if (!nextStepMatches || nextStepMatches.length === 0) {
+            await Match.create({
+                player1Id: playerId,
+                stepId: nextStep[0].id
+            });
+        } else {
+            const nextStepMatch = nextStepMatches[0];
+            nextStepMatch.player2Id = playerId;
+            await nextStepMatch.save();
         }
+        // Si les scores sont enregistrés et qu'un nouveau match a été créé, on informe le client en ajoutant l'id du gagnant
+        res.status(200).json({message: 'Scores ajoutés avec succès.', winnerId: winnerId});
 
-        // @TODO si les scores sont enregistrés et qu'un nouveau match a été créé c'est chouette d'en informer le client
-        // Histoire de pouvoir lui afficher des confettis ou un smiley qui pleure
-        res.status(200).json({ message: 'Scores ajoutés avec succès.', winnerId: winnerId });
-
-    } catch (error) {
+    } catch
+        (error) {
         console.error(error);
         return res.status(500).json({message: 'Une erreur est survenue lors de l\'ajout des scores.'});
     }

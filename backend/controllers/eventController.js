@@ -2,6 +2,7 @@
 import Event from '../models/eventModel.js'
 import Step from '../models/stepModel.js'
 import Match from "../models/matchModel.js";
+import User from "../models/userModel.js";
 
 //Création d'un evenement (tournoi)
 export async function createEvent(req, res) {
@@ -114,9 +115,10 @@ export async function joinEvent(req, res) {
 }
 
 //Inviter des participants
-export async function invitePlayers(req, res) {
-
-}
+//@TODO A implementer
+// export async function invitePlayers(req, res) {
+//
+// }
 
 // Récupérer tous les evenements
 export async function getAllEvents(req, res) {
@@ -134,5 +136,32 @@ export async function getAllEvents(req, res) {
 
 // Récupérer un seul evenement
 export async function getOneEvent(req, res) {
+    try {
+        const eventId = req.params.id;
+        const event = await Event.findByPk(eventId, {
+            include: [
+                {
+                    model: Step,
+                    include: {
+                        model: Match,
+                        attributes: ['id', 'player1Id', 'player2Id', 'stepId', 'u1score1', 'u1score2', 'u2score1', 'u2score2'],
+                    },
+                },
+                {
+                    model: User,
+                    attributes: {exclude: ['email', 'password', 'is_active', 'token']},
+                    through: {attributes: []}, // Exclure les attributs de la table de jointure
+                },
+            ],
+        });
 
+        if (!event) {
+            return res.status(404).json({message: 'Événement non trouvé'});
+        }
+
+        res.status(200).json(event);
+    } catch (error) {
+        console.error('Erreur lors de la récupération de l\'événement :', error);
+        res.status(500).json({message: 'Une erreur est survenue lors de la récupération de l\'événement'});
+    }
 }

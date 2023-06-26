@@ -24,9 +24,11 @@ const Match = sequelize.define('match',
         isDone: {
             type: DataTypes.VIRTUAL,
             get() {
-                return this.u1score1 && this.u1score2 && this.u2score1 && this.u2score2 && this.u1score1 === this.u2score1 && this.u1score2 === this.u2score2;
+                return this.u1score1 && this.u1score2 && this.u2score1 && this.u2score2
+                    && this.u1score1 === this.u2score1 && this.u1score2 === this.u2score2
+                    && this.u1score1 !== this.u1score2;
             },
-            set(value) {
+            set() {
                 throw new Error('Do not try to set the `isDone` value!');
             }
         }
