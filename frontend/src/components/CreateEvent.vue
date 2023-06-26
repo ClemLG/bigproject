@@ -17,7 +17,7 @@ export default {
 </script>
 
 <template>
-  <b-button @click="()=>isVisible=true">Créer un tournoi</b-button>
+  <b-button class="bg-primary" @click="()=>isVisible=true">Créer un tournoi</b-button>
   <Modal v-model="isVisible">
     <CreateEventForm/>
   </Modal>

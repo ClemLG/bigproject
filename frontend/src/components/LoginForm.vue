@@ -29,10 +29,8 @@ export default {
         this.notyf.error("Tous les champs doivent être remplis !")
         return
       }
-      console.log(this.email)
       // Si ok on envoi les données
-      axios
-          .post('http://localhost:3003/api/auth/login', {
+      axios.post('http://localhost:3003/api/auth/login', {
             email: this.email,
             password: this.password
           }, {withCredentials: true}) // prevoir pour toutes les requetes

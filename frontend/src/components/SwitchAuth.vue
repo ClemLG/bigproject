@@ -39,7 +39,7 @@ export default {
     }
 
     &.active {
-      color: $links;
+      color: $primary-color;
       font-weight: bold;
     }
   }

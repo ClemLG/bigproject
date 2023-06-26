@@ -1,31 +1,3 @@
-<template>
-  <section class="background"></section>
-  <b-container class="home__container">
-    <b-row align-h="center" align-v="center" class="py-5">
-      <b-col cols="12" md="6">
-        <header class="d-flex flex-column align-items-center mb-4">
-          <a @click="reloadPage" aria-label="rechargement de la page">
-            <b-img :src="require('../assets/img/dualz_logo.svg')" alt="logo de Dualz" aria-label="logo de Dualz" fluid/>
-          </a>
-          <h1>Prêt pour la compet ?</h1>
-          <h2>C'est par ici</h2>
-          <p>Dualz est une application qui offre aux passionnés de jeux vidéo la possibilité de créer et de rejoindre
-            des tournois en ligne. Préparez-vous à affronter de nouveaux défis, à rencontrer de nouveaux adversaires et
-            à vivre des moments de jeu inoubliables avec Dualz. L'excitation des tournois vous attend.
-          </p>
-        </header>
-      </b-col>
-      <b-col cols="12" md="6">
-        <b-card class="home__container__card p-2 p-md-4">
-          <SwitchAuth class="mb-4" :current-view="currentView" @switch="onSwitch"/>
-          <RegisterForm v-if="currentView === 'register'"/>
-          <LoginForm v-if="currentView === 'login'"/>
-        </b-card>
-      </b-col>
-    </b-row>
-  </b-container>
-</template>
-
 <script>
 import RegisterForm from '@/components/RegisterForm.vue'
 import LoginForm from '@/components/LoginForm.vue'
@@ -55,6 +27,33 @@ export default {
 }
 </script>
 
+<template>
+  <section class="background"></section>
+  <b-container class="home__container">
+    <b-row align-h="center" align-v="center" class="py-5">
+      <b-col cols="12" md="6">
+        <header class="d-flex flex-column align-items-center mb-4">
+          <a @click="reloadPage" aria-label="rechargement de la page">
+            <b-img :src="require('../assets/img/dualz_logo.svg')" alt="logo de Dualz" aria-label="logo de Dualz" fluid/>
+          </a>
+          <h1>Prêt pour la compet ?</h1>
+          <h2>C'est par ici</h2>
+          <p>Dualz est une application qui offre aux passionnés de jeux vidéo la possibilité de créer et de rejoindre
+            des tournois en ligne. Préparez-vous à affronter de nouveaux défis, à rencontrer de nouveaux adversaires et
+            à vivre des moments de jeu inoubliables avec Dualz. L'excitation des tournois vous attend.
+          </p>
+        </header>
+      </b-col>
+      <b-col cols="12" md="6">
+        <b-card class="home__container__card p-2 p-md-4">
+          <SwitchAuth class="mb-4" :current-view="currentView" @switch="onSwitch"/>
+          <RegisterForm v-if="currentView === 'register'"/>
+          <LoginForm v-if="currentView === 'login'"/>
+        </b-card>
+      </b-col>
+    </b-row>
+  </b-container>
+</template>
 
 <style lang="scss">
 @import "../../src/style/style";
