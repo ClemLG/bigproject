@@ -59,23 +59,23 @@ export default {
 
 <template>
   <b-form class="register__form" @submit.prevent="addUser">
-    <b-form-group id="username" label="Nom d'utilisateur" label-for="username" label-class="mb-0">
-      <b-form-input class="register__form__input" type="text" name="username" id="username"
+    <b-form-group  label="Nom d'utilisateur" label-for="username" label-class="mb-0">
+      <b-form-input class="register__form__input" type="text" name="username" id="username" aria-label="nom d'utilisateur"
                     placeholder="Nom d'utilisateur" v-model="username"/>
     </b-form-group>
-    <b-form-group id="email" label="E-Mail" label-for="email" label-class="mb-0">
-      <b-form-input class="register__form__input" type="email" name="email" id="email" placeholder="Email"
+    <b-form-group label="E-Mail" label-for="email" label-class="mb-0">
+      <b-form-input class="register__form__input" type="email" name="email" id="email" placeholder="Email" aria-label="email"
                     v-model="email"/>
     </b-form-group>
-    <b-form-group id="password" label="Mot de passe" label-for="password" label-class="mb-0">
-      <b-form-input class="register__form__input" type="password" name="password" id="password"
+    <b-form-group  label="Mot de passe" label-for="password" label-class="mb-0">
+      <b-form-input class="register__form__input" type="password" name="password" id="password" aria-label="mot de passe"
                     placeholder="Mot de passe" v-model="password"/>
     </b-form-group>
-    <b-form-group id="confirm" label="Confirmation mot de passe" label-for="confirm" label-class="mb-0">
+    <b-form-group label="Confirmation mot de passe" label-for="confirm" label-class="mb-0">
       <b-form-input class="register__form__input" type="password" name="confirm" id="confirm" placeholder="Confirmation mot de passe " v-model="confirm"/>
     </b-form-group>
     <div class="d-flex justify-content-center my-4">
-      <b-button class="register__form__submit-button" type="submit" aria-role="soumission du formulaire d'inscription">
+      <b-button class="register__form__submit-button" type="submit" aria-label="soumission du formulaire d'inscription">
         S'inscrire
       </b-button>
     </div>
