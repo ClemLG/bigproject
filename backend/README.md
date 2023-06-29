@@ -37,6 +37,7 @@ npm install
 }
 
 ```
+Une fois la base de donnée créée et "Sequelize" installé avec npm install, la base de donnée s'auto génère.
 
 ## Démarrage du serveur
 

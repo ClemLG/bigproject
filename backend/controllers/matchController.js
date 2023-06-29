@@ -26,12 +26,12 @@ export async function update(req, res) {
         const step = await match.getStep();
         const event = await step.getEvent();
 
-        // Vérifier si l'Event du match est bien en cours (date_début < now && now < date_fin)
-        // Sinon erreur et fin
-        // const currentDate = Date.now()
-        // if (currentDate < event.start_date || event.end_date < currentDate) {
-        //     return res.status(400).json({message: 'L\'événement n\'est pas en cours.'});
-        // }
+        //Vérifier si l'Event du match est bien en cours (date_début < now && now < date_fin)
+        //Sinon erreur et fin
+        const currentDate = Date.now()
+        if (currentDate < event.start_date || event.end_date < currentDate) {
+            return res.status(400).json({message: 'L\'événement n\'est pas en cours.'});
+        }
 
         if (match.isDone) {
             return res.status(403).json({message: 'Match déjà validé'});
